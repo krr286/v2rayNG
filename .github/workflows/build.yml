@@ -54,7 +54,22 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleFdroidDebug
 
-      - name: Upload Debug APK
+      - name: Rename APK
+        run: |
+          mkdir -p /tmp/out
+          cp V2rayNG/app/build/outputs/apk/fdroid/debug/*.apk /tmp/out/thek-v2rayng-debug.apk
+          ls -la /tmp/out/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: THEK v1.0.${{ github.run_number }}
+          files: /tmp/out/thek-v2rayng-debug.apk
+          draft: false
+          prerelease: false
+
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: thek-v2rayng-debug
